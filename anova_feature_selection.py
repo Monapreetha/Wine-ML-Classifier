@@ -100,35 +100,28 @@ def perform_anova_feature_selection(csv_path='Wine_dataset_cleaned.csv'):
     print(f"\n    - Peak Average Cross-Validated Accuracy: {best_avg_acc*100:.2f}% achieved at k = {best_k}")
     print(f"    - Full 13-Feature Average Accuracy:     {full_avg_acc*100:.2f}%")
     
-    # 4. Select Optimal Features (k = 7 and k = best_k)
-    # Typically k=7 or 8 captures > 98% accuracy while dropping lower-significance features
-    selected_features = anova_results.loc[:best_k - 1, 'Feature'].tolist()
-    print(f"\n[3] SELECTED TOP {best_k} FEATURES BY ANOVA:")
-    for i, feat in enumerate(selected_features, 1):
+    # 4. Select Optimal Top 8 Features
+    top8_features = anova_results.loc[:7, 'Feature'].tolist()
+    print(f"\n[3] SELECTED TOP 8 FEATURES BY ANOVA:")
+    for i, feat in enumerate(top8_features, 1):
         f_val = anova_results.loc[anova_results['Feature'] == feat, 'F_Statistic'].values[0]
         print(f"    {i}. {feat} (F = {f_val:.2f})")
 
-    discarded_features = anova_results.loc[best_k:, 'Feature'].tolist()
+    discarded_features = anova_results.loc[8:, 'Feature'].tolist()
     print(f"\n    - Features Dropped ({len(discarded_features)} features):")
     for feat in discarded_features:
         f_val = anova_results.loc[anova_results['Feature'] == feat, 'F_Statistic'].values[0]
         print(f"      * {feat} (F = {f_val:.2f})")
 
-    # 5. Export Reduced Datasets
-    # 5a. Cleaned reduced dataset
-    df_reduced = df[['class'] + selected_features]
-    reduced_path = 'Wine_dataset_anova_selected.csv'
-    df_reduced.to_csv(reduced_path, index=False)
-    print(f"\n[4] EXPORTED REDUCED DATASET:")
-    print(f"    - Saved to '{reduced_path}' (Shape: {df_reduced.shape})")
+    # 5. Export Selected Top 8 Dataset
+    df_top8 = df[['class'] + top8_features]
+    reduced_path = 'Wine_dataset_top8_anova.csv'
+    df_top8.to_csv(reduced_path, index=False)
+    print(f"\n[4] EXPORTED SELECTED DATASET:")
+    print(f"    - Saved to '{reduced_path}' (Shape: {df_top8.shape})")
 
-    # 5b. Standardized reduced dataset
-    X_selected_scaled = scaler.fit_transform(df[selected_features])
-    df_reduced_scaled = pd.DataFrame(X_selected_scaled, columns=selected_features)
-    df_reduced_scaled.insert(0, 'class', df['class'].values)
-    reduced_scaled_path = 'Wine_dataset_anova_selected_standardized.csv'
-    df_reduced_scaled.to_csv(reduced_scaled_path, index=False)
-    print(f"    - Saved standardized to '{reduced_scaled_path}' (Shape: {df_reduced_scaled.shape})")
+    selected_features = top8_features
+    best_k = 8
 
     # ==========================================
     # GENERATE DIAGNOSTIC VISUALIZATION CHARTS

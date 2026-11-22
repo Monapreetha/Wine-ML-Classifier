@@ -107,22 +107,10 @@ def preprocess_wine_data(input_path='Wine dataset.csv'):
     print(f"\n[7] Export Cleaned Dataset:")
     print(f"    - Saved to '{cleaned_filename}' ({df.shape[0]} rows, {df.shape[1]} cols)")
 
-    # 8. Feature Scaling (Standardization for ML)
-    # Target 'class' is preserved; feature columns are scaled to mean=0, std=1
-    scaler = StandardScaler()
-    scaled_features = scaler.fit_transform(df[feature_cols])
-    df_scaled = pd.DataFrame(scaled_features, columns=feature_cols)
-    df_scaled.insert(0, 'class', df['class'].values)
-    
-    scaled_filename = 'Wine_dataset_standardized.csv'
-    df_scaled.to_csv(scaled_filename, index=False)
-    print(f"\n[8] Export Standardized Dataset (Mean=0, Std=1 for features):")
-    print(f"    - Saved to '{scaled_filename}'")
-
     print("\n" + "=" * 60)
     print("             PREPROCESSING COMPLETED SUCCESSFULLY")
     print("=" * 60)
-    return df, df_scaled
+    return df
 
 if __name__ == '__main__':
     preprocess_wine_data()

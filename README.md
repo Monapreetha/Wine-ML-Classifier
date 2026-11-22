@@ -50,9 +50,7 @@ Evaluated on an 80/20 Stratified Train-Test split and 5-Fold Cross-Validation:
 ```
 ├── Wine dataset.csv                                # Raw dataset
 ├── Wine_dataset_cleaned.csv                        # Cleaned dataset (whitespace trimmed)
-├── Wine_dataset_standardized.csv                   # All 13 features standardized (mean=0, std=1)
 ├── Wine_dataset_top8_anova.csv                     # Top 8 ANOVA-selected features dataset
-├── Wine_dataset_top8_anova_standardized.csv        # Top 8 standardized features dataset
 │
 ├── preprocess_wine_dataset.py                      # Data preprocessing pipeline
 ├── eda_wine_dataset.py                             # Exploratory Data Analysis script
